@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:trabajo/Gestion/Curso/Curso_page.dart';
 import 'package:trabajo/Gestion/MenuG.dart';
+import 'package:trabajo/Listar/MenuL.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int _paginaactual = 0;
+  List<Widget> _paginas = [
+    MenuG(),
+    MenuL()
+  ];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,7 +37,31 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MenuG(),
+      home: Scaffold(
+        appBar: AppBar(
+        title: Text('Escuela los cachorros'),
+        backgroundColor: Colors.indigo,
+      ),
+      body: _paginas[_paginaactual],
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.indigo,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        iconSize: 30,
+        selectedFontSize: 20,
+        showUnselectedLabels: false,
+        onTap: (valor){
+          setState(() {
+            _paginaactual = valor;
+          });
+        },
+        currentIndex: _paginaactual,  
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.android), label: 'Gestion'),
+          BottomNavigationBarItem(icon: Icon(Icons.list) , label: 'Listado')
+        ],
+      ),
+      ),
     );
   }
 }

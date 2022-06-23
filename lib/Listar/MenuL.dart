@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:trabajo/Gestion/Curso/Curso_page.dart';
-import 'package:trabajo/Gestion/Ni%C3%B1o/Alumnos_page.dart';
-import 'package:trabajo/Gestion/Profesores/Profesores.dart';
+import 'package:trabajo/Listar/ListadoCursos/ListCursos.dart';
+import 'package:trabajo/providers/Curso_provider.dart';
 
-
-class MenuG extends StatefulWidget {
-  MenuG({Key? key}) : super(key: key);
+class MenuL extends StatefulWidget {
+  MenuL({Key? key}) : super(key: key);
 
   @override
-  State<MenuG> createState() => _MenuGState();
+  State<MenuL> createState() => _MenuLState();
 }
 
-class _MenuGState extends State<MenuG> {
+class _MenuLState extends State<MenuL> {
   final double iconHeight = 144;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.android),
         title: Text('Menu de gestión'),
@@ -39,9 +37,9 @@ class _MenuGState extends State<MenuG> {
               children: [
                 curso(),
                 Divider(),
-                profesores(),
+                /*profesores(),
                 Divider(),
-                kids()
+                kids()*/
               ],
             ))
         ],
@@ -55,22 +53,21 @@ class _MenuGState extends State<MenuG> {
     return ListTile(
       onTap: () {
       MaterialPageRoute route = MaterialPageRoute(builder: (context) {
-        return CursoPage();
+        return ListCursos();
       });
       Navigator.push(context, route);
       },
       leading:CircleAvatar(
-        backgroundColor: Colors.white,
-        child: Image.network('https://thumbs.dreamstime.com/b/icono-de-gesti%C3%B3n-proyectos-engranajes-lista-comprobaci%C3%B3n-administraci%C3%B3n-la-del-portapapeles-aislado-en-fondo-blanco-servicios-222483353.jpg'),
+        child: Image.network('https://www.netacad.com/sites/default/files/images/educator/icon-download-250.png'),
         radius: iconHeight / 4,
       ),
-      title: Text('Curso', style: TextStyle(fontSize: 20),),
+      title: Text('Listado de cursos', style: TextStyle(fontSize: 20),),
     );
 
   }
 
 
-  ListTile profesores (){
+  /*ListTile profesores (){
     return ListTile(
       onTap: () {
       MaterialPageRoute route = MaterialPageRoute(builder: (context) {
@@ -79,8 +76,7 @@ class _MenuGState extends State<MenuG> {
       Navigator.push(context, route);
       },
       leading:CircleAvatar(
-        backgroundColor: Colors.white,
-        child: Image.network('https://thumbs.dreamstime.com/b/icono-de-gesti%C3%B3n-proyectos-engranajes-lista-comprobaci%C3%B3n-administraci%C3%B3n-la-del-portapapeles-aislado-en-fondo-blanco-servicios-222483353.jpg'),
+        child: Image.network('https://png.pngtree.com/png-vector/20190712/ourlarge/pngtree-user-management-icon-trendy-style-isolated-background-png-image_1542354.jpg'),
         radius: iconHeight / 4,
       ),
       title: Text('Profesores', style: TextStyle(fontSize: 20),),
@@ -92,17 +88,15 @@ class _MenuGState extends State<MenuG> {
     return ListTile(
       onTap: () {
       MaterialPageRoute route = MaterialPageRoute(builder: (context) {
-        return Ninos_page();
+        return Kids();
       });
       Navigator.push(context, route);
       },
       leading:CircleAvatar(
-        backgroundColor: Colors.white,
-        child: Image.network('https://thumbs.dreamstime.com/b/icono-de-gesti%C3%B3n-proyectos-engranajes-lista-comprobaci%C3%B3n-administraci%C3%B3n-la-del-portapapeles-aislado-en-fondo-blanco-servicios-222483353.jpg'),
+        child: Image.network('https://png.pngtree.com/png-vector/20190712/ourlarge/pngtree-user-management-icon-trendy-style-isolated-background-png-image_1542354.jpg'),
         radius: iconHeight / 4,
       ),
       title: Text('Niños', style: TextStyle(fontSize: 20),),
     );
-
-  }
+  }*/
 }

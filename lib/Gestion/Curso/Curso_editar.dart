@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:trabajo/providers/Curso_provider.dart';
 
 class CursoEditarPage extends StatefulWidget {
@@ -21,6 +21,11 @@ class _CursoEditarPageState extends State<CursoEditarPage> {
     // TODO: implement initState
     super.initState();
 
+    CursoProvider().getCursoo(widget.codCurso).then((data){
+      codigoCtrl.text = data['cod_curso'];
+      cursoCtrl.text = data['curso'];
+      cantidadCtrl.text = data['cantidad'].toString();
+    });
   }
 
   Widget build(BuildContext context) {
@@ -57,13 +62,14 @@ class _CursoEditarPageState extends State<CursoEditarPage> {
                   TextFormField(
                   controller: cantidadCtrl,
                   decoration: InputDecoration(labelText: 'Cantidad de alumnos'),
+                  keyboardType: TextInputType.number,
                   ),
                   Container(
                     width: double.infinity,
                     child: ElevatedButton(
                       child: Text('Editar'),
                       onPressed: () {
-                        CursoProvider.cursoEditar(
+                        CursoProvider().cursoEditar(
                           widget.codCurso,
                           codigoCtrl.text.trim(),
                           cursoCtrl.text.trim(),

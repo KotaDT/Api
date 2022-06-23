@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:trabajo/Gestion/Curso/Curso_agregar_page.dart';
-import 'package:trabajo/Gestion/Curso/Curso_editar.dart';
-import 'package:trabajo/providers/Curso_provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:trabajo/Gestion/Profesores/educadoras_editar.dart';
+import 'package:trabajo/Gestion/Profesores/educadoras_agregar.dart';
+import 'package:trabajo/providers/educadoras_provider.dart';
 
-class CursoPage extends StatefulWidget {
-  CursoPage({Key? key}) : super(key: key);
+class Profesores extends StatefulWidget {
+  Profesores({Key? key}) : super(key: key);
 
   @override
-  State<CursoPage> createState() => _CursoPageState();
+  State<Profesores> createState() => _ProfesoresState();
 }
 
-class _CursoPageState extends State<CursoPage> {
-
+class _ProfesoresState extends State<Profesores> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lista de cursos'),
-        backgroundColor: Colors.indigo,
+        title: Text('Lista de educadoras'),
+        backgroundColor: Color.fromARGB(255, 186, 53, 97),
       ),
       body: Padding(
         padding: EdgeInsets.all(5),
@@ -27,31 +25,28 @@ class _CursoPageState extends State<CursoPage> {
           children: [
             Expanded(
               child: FutureBuilder(
-                future: CursoProvider().getCurso(),
-                builder: (context, AsyncSnapshot snap){
-                  if(!snap.hasData){
+                future: EducadorasProvider().getEducadoras(),
+                builder: (context, AsyncSnapshot snap) {
+                  if (!snap.hasData) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
                   }
                   return ListView.separated(
-                    separatorBuilder: (_,__) => Divider(),
+                    separatorBuilder: (_, __) => Divider(),
                     itemCount: snap.data.length,
-                    itemBuilder: (context, index){
-                      var cur = snap.data[index];
+                    itemBuilder: (context, index) {
+                      var tia = snap.data[index];
                       return Slidable(
                         child: ListTile(
-                          leading: CircleAvatar(
-                            child: Image.network('https://cdn.icon-icons.com/icons2/1459/PNG/512/2799204-management_99783.png')
+                          leading: Icon(Icons.favorite),
+                          title: Text(
+                            '${tia['nombre']}',
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.indigo),
                           ),
-                          title: Container(
-                            child:Row(children: [
-                              Text('${cur['curso']}', style: TextStyle(fontSize: 18, color: Colors.indigo),),
-                              Spacer(),
-                              Text('Nivel: ${cur['cod_curso']}', style: TextStyle(fontSize: 18, color: Colors.indigo),)  
-                            ],) 
-                            ),
-                          subtitle: Text('Cantidad de alumnos:${cur['cantidad']}'),
+                          subtitle: Text('Telefono: ${tia['telefono']}'),
+                          trailing: Text(tia['cod_curso']),
                         ),
                         startActionPane: ActionPane(
                           motion: ScrollMotion(),
@@ -59,13 +54,16 @@ class _CursoPageState extends State<CursoPage> {
                             SlidableAction(
                               onPressed: (context) {
                                 MaterialPageRoute route = MaterialPageRoute(
-                                  builder: (context) => CursoEditarPage(cur['cod_curso']),
+                                  builder: (context) =>
+                                      EducadoraEditarPage(tia['cod_tia']),
                                 );
                                 Navigator.push(context, route).then((value) {
                                   setState(() {});
                                 });
                               },
-                              backgroundColor: Colors.purple,
+                              backgroundColor:
+                                  Color.fromARGB(255, 193, 113, 255),
+                              icon: Icons.edit_note,
                               label: 'Editar',
                             ),
                           ],
@@ -75,27 +73,32 @@ class _CursoPageState extends State<CursoPage> {
                           children: [
                             SlidableAction(
                               onPressed: (context) {
-                                String cod_curso = cur['cod_curso'];
-                                String curso = cur['curso'];
+                                String cod_tia = tia['cod_tia'];
+                                String nombre = tia['nombre'];
 
-                                confirmDialog(context, curso).then((confirma) {
+                                confirmDialog(context, nombre).then((confirma) {
                                   if (confirma) {
                                     //borrar
-                                    CursoProvider().cursoBorrar(cod_curso).then((borradoOk) {
+                                    EducadorasProvider()
+                                        .educadorasBorrar(cod_tia)
+                                        .then((borradoOk) {
                                       if (borradoOk) {
                                         //pudo borrar
                                         snap.data.removeAt(index);
                                         setState(() {});
-                                        showSnackbar('Producto $curso borrado');
+                                        showSnackbar(
+                                            'Educadora $nombre borrado');
                                       } else {
                                         //no pudo borrar
-                                        showSnackbar('No se pudo borrar el producto');
+                                        showSnackbar(
+                                            'No se pudo borrar la funcionaria');
                                       }
                                     });
                                   }
                                 });
                               },
                               backgroundColor: Colors.red,
+                              icon: Icons.delete,
                               label: 'Borrar',
                             ),
                           ],
@@ -106,20 +109,28 @@ class _CursoPageState extends State<CursoPage> {
                 },
               ),
             ),
+
+            //boton agregar
             Container(
               width: double.infinity,
-              child: ElevatedButton(child: Text('Agregar', style: TextStyle(fontSize: 20),),
-              onPressed: (){
-                MaterialPageRoute go = MaterialPageRoute(
-                  builder: (context){
-                    return CursoAgregarPage();
+              child: ElevatedButton(
+                child: Text('Agregar Educadora'),
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.pinkAccent)),
+                onPressed: () {
+                  MaterialPageRoute route =
+                      MaterialPageRoute(builder: (context) {
+                    return EducadorasAgregar();
                   });
-                  Navigator.push(context, go).then((value){
-                    print('Actualizar Pagina');
+
+                  Navigator.push(context, route).then((value) {
+                    print('ACTUALIZAR PAGINA');
                     setState(() {});
                   });
-              },),
-            )
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -135,15 +146,14 @@ class _CursoPageState extends State<CursoPage> {
     );
   }
 
-
-  Future<dynamic> confirmDialog(BuildContext context, String producto) {
+  Future<dynamic> confirmDialog(BuildContext context, String nombre) {
     return showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text('Confirmar borrado'),
-          content: Text('¿Borrar el producto $producto?'),
+          content: Text('¿Borrar la funcionaria $nombre?'),
           actions: [
             TextButton(
               child: Text('CANCELAR'),

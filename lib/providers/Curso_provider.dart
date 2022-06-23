@@ -27,6 +27,23 @@ class CursoProvider {
       return new LinkedHashMap();
     }
   }
+
+  Future<LinkedHashMap<String, dynamic>> cursoEditar(
+      String cod_curso, String cod_curso_nuevo, String curso, int cantidad) async {
+    var uri = Uri.parse('$apiURL/curso/$cod_curso');
+    var respuesta = await http.put(uri,
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Accept': 'application/json'},
+        body: jsonEncode(<String, dynamic>{
+          'cod_curso': cod_curso,
+          'cod_curso_nuevo': cod_curso_nuevo,
+          'curso': curso,
+          'cantidad':cantidad
+        }));
+
+    return json.decode(respuesta.body);
+  }
+
+  
   
   Future<LinkedHashMap<String, dynamic>>cursoAgregar(String cod_curso, String curso, int cantidad)async{
     var uri = Uri.parse('$apiURL/curso');
@@ -35,10 +52,23 @@ class CursoProvider {
     return json.decode(respuesta.body);
   }
 
+
+
   Future<bool> cursoBorrar(String cod_curso)async{
     var uri = Uri.parse('$apiURL/curso/$cod_curso');
     var respuesta = await http.delete(uri);
 
     return respuesta.statusCode == 200;
+  }
+
+  Future<List<dynamic>> getCursocmb() async {
+    var url = Uri.parse('$apiURL/curso');
+    var respuesta = await http.get(url);
+
+    if (respuesta.statusCode == 200) {
+      return json.decode(respuesta.body);
+    } else {
+      return [];
+    }
   }
 }
